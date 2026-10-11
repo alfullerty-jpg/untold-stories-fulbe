@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="The Untold Stories of Fulɓe — preserving history, culture, memory and the voices too often left unheard.">
+<meta name="theme-color" content="#073b32">
+<title>The Untold Stories of Fulɓe</title>
+<style>
+:root{--green:#073b32;--green2:#0d5144;--gold:#eab84e;--cream:#f8f5ee;--ink:#142620;--muted:#5b675f;--line:#e4dfd4;--white:#fff}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--cream);color:var(--ink);font-family:Arial,Helvetica,sans-serif;line-height:1.6}a{color:inherit}button,input,textarea,select{font:inherit}button,a.btn{cursor:pointer}.wrap{width:min(1160px,calc(100% - 40px));margin:auto}
+header{position:sticky;top:0;z-index:20;background:rgba(5,45,38,.97);color:#fff;border-bottom:1px solid #ffffff22;backdrop-filter:blur(10px)}
+.nav{min-height:76px;display:flex;align-items:center;justify-content:space-between;gap:22px}.brand{display:flex;align-items:center;gap:12px;text-decoration:none;min-width:max-content}.mark{width:44px;height:44px;border:1px solid var(--gold);border-radius:50%;display:grid;place-items:center;color:var(--gold);font-size:24px}.brand-name{font-family:Georgia,serif;font-weight:bold;font-size:20px;line-height:1.05}.brand-name span{display:block;font-size:24px}.navlinks{display:flex;align-items:center;gap:23px}.navlinks a{text-decoration:none;font-size:14px;color:#f6f4ed}.navlinks a:hover,.navlinks a:focus{color:var(--gold)}.menu-btn{display:none;background:transparent;color:white;border:1px solid #ffffff55;border-radius:8px;padding:7px 11px}
+.hero{position:relative;isolation:isolate;min-height:465px;display:flex;align-items:center;color:#fff;background:#263b31 url('https://images.unsplash.com/photo-1509316785289-025f5b846b35?auto=format&fit=crop&w=2000&q=85') center 48%/cover no-repeat}
+.hero:before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(7,25,21,.88),rgba(7,25,21,.58) 47%,rgba(7,25,21,.06))}
+.hero-content{padding:72px 0;max-width:650px}.eyebrow{color:var(--gold);text-transform:uppercase;letter-spacing:1.5px;font-weight:bold;font-size:12px}.hero h1{font-family:Georgia,'Times New Roman',serif;font-size:clamp(42px,6vw,70px);line-height:.99;letter-spacing:-1.5px;margin:15px 0}.hero h1 span{color:var(--gold)}.hero .lead{font-size:clamp(18px,2.1vw,22px);max-width:570px;margin:0 0 14px}.hero p{max-width:530px;color:#f0eee7}.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:12px 20px;background:var(--gold);color:#18251f;text-decoration:none;border:0;border-radius:3px;font-weight:bold;font-size:14px;transition:transform .2s,filter .2s}.btn:hover{transform:translateY(-2px);filter:brightness(1.04)}.btn.secondary{background:var(--green);color:#fff}.btn.outline{background:transparent;color:#fff;border:1px solid #ffffffaa}
+section{padding:54px 0}.section-top{display:flex;align-items:end;justify-content:space-between;gap:20px;margin-bottom:22px}.kicker{font-size:11px;text-transform:uppercase;letter-spacing:1.2px;font-weight:bold;color:var(--green2)}.kicker:before{content:"";display:inline-block;width:28px;height:3px;background:var(--gold);vertical-align:middle;margin-right:10px}.section-top h2,.about h2,.share h2{font-family:Georgia,serif;font-size:clamp(30px,4vw,42px);line-height:1.1;margin:7px 0 0;letter-spacing:-.6px}.text-link{font-size:14px;text-decoration:none;font-weight:bold;white-space:nowrap}.text-link:hover{color:var(--green2)}
+.stories{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}.story-card{background:#fff;border:1px solid var(--line);border-radius:7px;overflow:hidden;display:flex;flex-direction:column;min-width:0;box-shadow:0 4px 16px #16251b08}.story-card img{width:100%;height:175px;object-fit:cover;background:#ddd}.story-body{padding:16px;display:flex;flex-direction:column;flex:1}.tag{align-self:flex-start;background:var(--green);color:#fff;border-radius:2px;padding:3px 8px;font-size:10px;text-transform:uppercase;letter-spacing:.7px;font-weight:bold}.story-card h3{font-family:Georgia,serif;font-size:21px;line-height:1.17;margin:11px 0 8px}.story-card p{font-size:14px;color:#4e5a53;margin:0 0 14px}.story-meta{margin-top:auto;border-top:1px solid #eee9df;padding-top:10px;display:flex;justify-content:space-between;gap:8px;font-size:11px;color:#68736d}.read-btn{border:0;background:none;padding:0;margin-top:10px;color:var(--green2);font-weight:bold;text-align:left}
+.controls{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 20px}.controls input,.controls select{border:1px solid #d7d2c7;background:#fff;border-radius:5px;padding:10px 12px;min-height:42px}.controls input{flex:1;min-width:200px}.empty{display:none;padding:20px;border:1px dashed #bcb7ac;border-radius:6px;color:var(--muted)}
+.explore{padding-top:4px}.explore-layout{display:grid;grid-template-columns:minmax(0,1.8fr) minmax(260px,.8fr);gap:26px;align-items:stretch}.category-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}.category{position:relative;min-height:155px;border:0;border-radius:6px;overflow:hidden;color:#fff;text-align:left;background:#293b30 center/cover;display:flex;align-items:end;padding:12px;text-decoration:none}.category:before{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#061c17e8,transparent 78%);transition:background .2s}.category:hover:before{background:linear-gradient(0deg,#061c17f5,#061c1733)}.category span{position:relative;font-family:Georgia,serif;font-size:18px;font-weight:bold}.about{background:#f0ece2;border-radius:8px;padding:25px}.about h2{font-size:27px}.about p{font-size:14px;color:#48564e}.about .btn{margin-top:7px}
+.share{position:relative;overflow:hidden;color:#fff;background:var(--green);padding:50px 0;background-image:linear-gradient(90deg,rgba(3,41,34,.98),rgba(3,41,34,.84)),url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1800&q=80');background-size:cover;background-position:center}.share-layout{display:grid;grid-template-columns:1.5fr .7fr;gap:30px;align-items:center}.share h2{font-size:clamp(32px,4vw,44px)}.share p{max-width:650px;color:#e1e8e2}.quote{font-family:Georgia,serif;font-size:21px;font-style:italic;border-left:3px solid var(--gold);padding-left:20px;color:#f7e7bf}
+.newsletter{padding:28px 0;background:#fff}.newsletter-inner{display:flex;align-items:center;gap:18px}.mail-icon{width:50px;height:50px;border-radius:50%;background:var(--gold);display:grid;place-items:center;font-size:23px;flex:none}.newsletter h3{font-family:Georgia,serif;margin:0;font-size:23px}.newsletter p{margin:2px 0 0;font-size:13px;color:var(--muted)}.newsletter form{display:flex;gap:6px;margin-left:auto;min-width:330px}.newsletter input{min-width:0;flex:1;padding:10px;border:1px solid #d8d4ca;border-radius:4px}.newsletter .btn{padding:10px 15px}
+footer{background:#042f28;color:#f2f3ed;padding:30px 0 18px}.footer-top{display:flex;justify-content:space-between;align-items:center;gap:24px;padding-bottom:20px}.footer-links{display:flex;gap:18px;flex-wrap:wrap}.footer-links a{font-size:12px;text-decoration:none;color:#e2e9e3}.footer-links a:hover{color:var(--gold)}.footer-note{font-family:Georgia,serif;font-style:italic;color:#e9d49d}.copyright{border-top:1px solid #ffffff2c;padding-top:14px;display:flex;justify-content:space-between;gap:15px;font-size:11px;color:#c8d4ce}
+dialog{width:min(680px,calc(100% - 28px));border:0;border-radius:10px;padding:0;box-shadow:0 20px 80px #0006;color:var(--ink)}dialog::backdrop{background:#071e19b8}.dialog-inner{padding:28px}.dialog-inner h2{font-family:Georgia,serif;font-size:32px;line-height:1.15;margin:12px 0}.dialog-inner p{color:#46544c}.dialog-close{float:right;border:1px solid #ddd;background:#fff;border-radius:5px;padding:5px 10px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.form-grid label{display:block;font-size:13px;font-weight:bold}.form-grid input,.form-grid textarea,.form-grid select{display:block;width:100%;margin-top:5px;border:1px solid #d8d2c5;border-radius:5px;padding:10px;background:#fff}.form-grid .full{grid-column:1/-1}.form-grid textarea{min-height:130px;resize:vertical}.notice{font-size:12px!important;color:#68736d!important}
+@media(max-width:950px){.navlinks{gap:13px}.navlinks a{font-size:12px}.stories{grid-template-columns:repeat(2,minmax(0,1fr))}.explore-layout{grid-template-columns:1fr}.category-grid{grid-template-columns:repeat(5,minmax(0,1fr))}.category{min-height:140px}.share-layout{grid-template-columns:1fr .65fr}.newsletter-inner{flex-wrap:wrap}.newsletter form{margin-left:68px;flex:1;min-width:280px}}
+@media(max-width:680px){.wrap{width:min(100% - 28px,1160px)}.nav{min-height:68px}.brand-name{font-size:17px}.brand-name span{font-size:20px}.mark{width:39px;height:39px}.menu-btn{display:block}.navlinks{display:none;position:absolute;top:68px;left:0;right:0;background:var(--green);padding:12px 20px 18px;flex-direction:column;align-items:stretch;gap:0;border-top:1px solid #ffffff22}.navlinks.open{display:flex}.navlinks a{padding:10px 4px;font-size:15px;border-bottom:1px solid #ffffff15}.hero{min-height:490px;background-position:60% center}.hero:before{background:linear-gradient(90deg,rgba(7,25,21,.9),rgba(7,25,21,.58))}.hero-content{padding:55px 0}.hero h1{font-size:clamp(42px,12vw,58px)}section{padding:40px 0}.section-top{align-items:start;flex-direction:column;gap:10px}.stories{grid-template-columns:1fr}.story-card{display:grid;grid-template-columns:120px 1fr}.story-card img{height:100%;min-height:210px}.story-body{padding:13px}.story-card h3{font-size:19px}.story-card p{font-size:13px}.story-meta{flex-wrap:wrap}.category-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.category{min-height:145px}.category:last-child{grid-column:span 2}.share-layout{grid-template-columns:1fr}.quote{font-size:19px}.newsletter-inner{align-items:flex-start}.newsletter form{margin:4px 0 0;width:100%;flex-basis:100%;min-width:0}.footer-top,.copyright{align-items:flex-start;flex-direction:column}.footer-links{gap:12px}.form-grid{grid-template-columns:1fr}.form-grid .full{grid-column:auto}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="#home" aria-label="The Untold Stories of Fulɓe home"><span class="mark" aria-hidden="true">◈</span><span class="brand-name">The Untold Stories<span>of Fulɓe</span></span></a>
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="navlinks">Menu ☰</button>
+    <nav class="navlinks" id="navlinks" aria-label="Main navigation">
+      <a href="#home">Home</a><a href="#about">About</a><a href="#stories">Stories</a><a href="#culture">Culture</a><a href="#history">History</a><a href="#gallery">Gallery</a><a href="#submit" class="submit-link">Submit a Story</a>
+    </nav>
+  </div>
+</header>
+<main>
+<section class="hero" id="home">
+  <div class="wrap hero-content">
+    <div class="eyebrow">Our people · Our history · Our stories</div>
+    <h1>The Untold Stories<br>of <span>Fulɓe</span></h1>
+    <p class="lead">Real stories. Hidden histories. A people beyond the stereotypes.</p>
+    <p>This is a space to explore rich heritage, overlooked narratives and the enduring spirit of Fulɓe people — past, present and future.</p>
+    <a class="btn" href="#stories">Explore Stories <span aria-hidden="true">→</span></a>
+  </div>
+</section>
+
+<section id="stories">
+  <div class="wrap">
+    <div class="section-top"><div><div class="kicker">Featured stories</div><h2>Stories that matter</h2></div><a class="text-link" href="#all-stories">Explore all stories →</a></div>
+    <div class="controls" id="all-stories">
+      <input type="search" id="storySearch" placeholder="Search stories…" aria-label="Search stories">
+      <select id="categoryFilter" aria-label="Filter by category"><option value="all">All categories</option><option value="History">History</option><option value="Culture">Culture</option><option value="Community">Community</option><option value="Achievements">Achievements</option><option value="Language">Language</option></select>
+    </div>
+    <div class="stories" id="storyGrid">
+      <article class="story-card" data-category="History" data-search="fulɓe sahara journey resilience trade trans-saharan routes history">
+        <img src="https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?auto=format&fit=crop&w=800&q=80" alt="Expansive African landscape beneath a bright sky" loading="lazy">
+        <div class="story-body"><span class="tag">History</span><h3>The Fulɓe and the Sahara: A Journey of Resilience</h3><p>Across generations, Fulɓe communities have built connections between regions, livelihoods and cultures. What can local histories tell us about these journeys?</p><div class="story-meta"><span>Heritage & memory</span><span>Sample story</span></div><button class="read-btn" data-story="sahara">Read the story →</button></div>
+      </article>
+      <article class="story-card" data-category="Culture" data-search="fulɓe women knowledge family community culture traditions leadership">
+        <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=800&q=80" alt="Portrait of a woman wearing traditional-inspired clothing" loading="lazy">
+        <div class="story-body"><span class="tag">Culture</span><h3>Fulɓe Women: Knowledge, Care and Quiet Leadership</h3><p>Family histories, craft, education, enterprise and community leadership reveal dimensions of women's lives that broad narratives can miss.</p><div class="story-meta"><span>People & culture</span><span>Sample story</span></div><button class="read-btn" data-story="women">Read the story →</button></div>
+      </article>
+      <article class="story-card" data-category="History" data-search="history reform scholarship Usman dan Fodio jihad complex historical context">
+        <img src="https://images.unsplash.com/photo-1509023464722-18d996393ca8?auto=format&fit=crop&w=800&q=80" alt="Historic architectural details in West Africa" loading="lazy">
+        <div class="story-body"><span class="tag">History</span><h3>History Beyond the Simplified Headlines</h3><p>Historical movements deserve careful context. Explore the people, ideas, conflicts and consequences through evidence and multiple perspectives.</p><div class="story-meta"><span>Historical inquiry</span><span>Sample story</span></div><button class="read-btn" data-story="history">Read the story →</button></div>
+      </article>
+      <article class="story-card" data-category="Achievements" data-search="young Fulɓe students professionals educators artists innovators achievements future">
+        <img src="https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?auto=format&fit=crop&w=800&q=80" alt="University graduates celebrating an achievement" loading="lazy">
+        <div class="story-body"><span class="tag">Achievements</span><h3>From the Pasture to the Classroom: Many Paths Forward</h3><p>Meet learners, educators, makers and professionals whose experiences show the diversity of contemporary Fulɓe life.</p><div class="story-meta"><span>Profiles</span><span>Sample story</span></div><button class="read-btn" data-story="youth">Read the story →</button></div>
+      </article>
+    </div>
+    <p class="empty" id="emptyState">No stories match your search yet. Try another word or category.</p>
+  </div>
+</section>
+
+<section class="explore" id="culture">
+  <div class="wrap explore-layout">
+    <div>
+      <div class="section-top"><div><div class="kicker">Explore by category</div><h2>Discover more</h2></div></div>
+      <div class="category-grid" id="history">
+        <a class="category" href="#stories" data-pick="History" style="background-image:url('https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?auto=format&fit=crop&w=500&q=80')"><span>History</span></a>
+        <a class="category" href="#stories" data-pick="Culture" style="background-image:url('https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=500&q=80')"><span>Culture</span></a>
+        <a class="category" href="#stories" data-pick="Community" style="background-image:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=500&q=80')"><span>Land & people</span></a>
+        <a class="category" href="#stories" data-pick="Language" style="background-image:url('https://images.unsplash.com/photo-1455390582262-044c363614c8?auto=format&fit=crop&w=500&q=80')"><span>Language</span></a>
+        <a class="category" href="#stories" data-pick="Community" style="background-image:url('https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=500&q=80')"><span>Community</span></a>
+      </div>
+    </div>
+    <aside class="about" id="about"><div class="kicker">Why this platform exists</div><h2>About this platform</h2><p><strong>The Untold Stories of Fulɓe</strong> is a cultural heritage and storytelling project dedicated to recording the diverse experiences, histories, knowledge and traditions of Fulɓe people.</p><p>We publish researched features, oral histories, personal essays and community contributions. We welcome thoughtful discussion and recognise that experiences and traditions differ across regions and families.</p><a class="btn secondary" href="#submit">Share your perspective →</a></aside>
+  </div>
+</section>
+
+<section class="share" id="submit">
+  <div class="wrap share-layout">
+    <div><div class="eyebrow">Share your story</div><h2>Your story matters.</h2><p>Do you have a family memory, historical account, personal experience, photograph or piece of knowledge worth preserving? Whether you are a student, elder, researcher, artist or community member, your voice can help build a richer record.</p><button class="btn outline" id="openSubmit">Submit a Story →</button></div>
+    <div class="quote">“When we preserve our stories, we give future generations more than memories. We give them context, belonging and a chance to understand.”</div>
+  </div>
+</section>
+
+<section class="newsletter" id="gallery">
+  <div class="wrap newsletter-inner">
+    <div class="mail-icon" aria-hidden="true">✉</div><div><h3>Stay connected</h3><p>Get new stories and cultural features in your inbox.</p></div>
+    <form id="newsletterForm"><input type="email" id="newsletterEmail" placeholder="Your email address" aria-label="Your email address" required><button class="btn secondary" type="submit">Subscribe</button></form>
+  </div>
+</section>
+</main>
+<footer>
+  <div class="wrap">
+    <div class="footer-top"><a class="brand" href="#home"><span class="mark" aria-hidden="true">◈</span><span class="brand-name">The Untold Stories<span>of Fulɓe</span></span></a><nav class="footer-links" aria-label="Footer navigation"><a href="#about">About</a><a href="#stories">Stories</a><a href="#culture">Culture</a><a href="#history">History</a><a href="#submit">Submit a Story</a></nav><div class="footer-note">Our stories. Our heritage. Our future.</div></div>
+    <div class="copyright"><span>© <span id="year"></span> The Untold Stories of Fulɓe. An independent cultural storytelling project.</span><span>Made with care for heritage and community.</span></div>
+  </div>
+</footer>
+
+<dialog id="storyDialog" aria-labelledby="dialogTitle"><div class="dialog-inner"><button class="dialog-close" id="closeStory" aria-label="Close story">Close ✕</button><div class="kicker" id="dialogTag">Featured story</div><h2 id="dialogTitle"></h2><div id="dialogContent"></div><p class="notice">Editorial note: this is introductory sample content for the website design. Historical claims should be checked against reliable sources and community testimony before publication.</p></div></dialog>
+<dialog id="submitDialog" aria-labelledby="submitTitle"><div class="dialog-inner"><button class="dialog-close" id="closeSubmit" aria-label="Close submission form">Close ✕</button><div class="kicker">Community contributions</div><h2 id="submitTitle">Submit your story</h2><p>Tell us what you would like to share. This demo prepares an email draft in your email app; it does not store submissions on a server.</p>
+<form class="form-grid" id="submitForm">
+<label>Your name<input name="name" required autocomplete="name"></label><label>Your email<input type="email" name="email" required autocomplete="email"></label>
+<label>Story type<select name="type"><option>Family or oral history</option><option>Culture and tradition</option><option>Personal experience</option><option>Research or historical account</option><option>Photo or archive contribution</option><option>Other</option></select></label>
+<label>Story title<input name="title" required></label>
+<label class="full">Your story or summary<textarea name="story" required placeholder="Share the background, people involved, location, dates if known, and any sources or permissions…"></textarea></label>
+<label class="full"><span><input type="checkbox" name="permission" required style="display:inline;width:auto"> I confirm I have the right to share this material and understand the editors may contact me for verification.</span></label>
+<div class="full"><button class="btn secondary" type="submit">Prepare submission email →</button><p class="notice">For live submissions from every visitor, connect this form to a form service or a website backend after publishing.</p></div>
+</form></div></dialog>
+<script>
+const $=s=>document.querySelector(s);
+const nav=$('#navlinks'), menuBtn=$('#menuBtn');
+menuBtn.addEventListener('click',()=>{const open=nav.classList.toggle('open');menuBtn.setAttribute('aria-expanded',String(open));});
+nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{nav.classList.remove('open');menuBtn.setAttribute('aria-expanded','false');}));
+$('#year').textContent=new Date().getFullYear();
+const search=$('#storySearch'), filter=$('#categoryFilter'), cards=[...document.querySelectorAll('.story-card')], empty=$('#emptyState');
+function filterStories(){const q=search.value.trim().toLowerCase(), cat=filter.value;let shown=0;cards.forEach(card=>{const ok=(cat==='all'||card.dataset.category===cat)&&((card.dataset.search+' '+card.innerText).toLowerCase().includes(q));card.style.display=ok?'':'none';if(ok)shown++;});empty.style.display=shown?'none':'block';}
+search.addEventListener('input',filterStories);filter.addEventListener('change',filterStories);
+document.querySelectorAll('[data-pick]').forEach(a=>a.addEventListener('click',()=>{filter.value=a.dataset.pick;filterStories();}));
+const stories={
+sahara:{tag:'History · Sample',title:'The Fulɓe and the Sahara: A Journey of Resilience',paragraphs:['The histories of Fulɓe communities cannot be reduced to a single route, occupation or moment in time. Across West and Central Africa, communities have developed different relationships with pastoralism, farming, scholarship, trade, towns and changing political systems.','Family memory, local archives, archaeology and written records can each illuminate part of this story. Reading them together helps us ask better questions about movement, adaptation and the relationships between communities.','This feature is a starting point, not a substitute for documented research. Readers are invited to contribute place-specific histories, names, dates and sources so that future versions can be more precise.']},
+women:{tag:'Culture · Sample',title:'Fulɓe Women: Knowledge, Care and Quiet Leadership',paragraphs:['Women’s experiences are central to any honest account of community life, yet their work and knowledge are not always preserved in formal histories. Oral testimony can help document family life, education, enterprise, creative traditions and leadership.','There is no single Fulɓe woman’s experience. Region, generation, livelihood, access to education and personal circumstance all shape people’s lives. A careful story makes room for those differences rather than presenting one voice as universal.','We welcome first-person accounts and interviews shared with informed consent, especially stories that families want future generations to remember.']},
+history:{tag:'History · Sample',title:'History Beyond the Simplified Headlines',paragraphs:['Historical movements and religious reform in the region involved ideas, alliances, conflict, scholarship and consequences that unfolded differently across places and communities. Responsible storytelling examines the evidence and the context rather than relying on a single label.','A fuller account compares primary sources, respected scholarship and local perspectives. It distinguishes what is documented from what remains disputed, and it avoids treating diverse people as if they all acted or thought alike.','This platform aims to make room for such careful inquiry. Corrections, citations and informed disagreement are welcome.']},
+youth:{tag:'Achievements · Sample',title:'From the Pasture to the Classroom: Many Paths Forward',paragraphs:['Fulɓe lives today span rural and urban communities, pastoral and non-pastoral livelihoods, education, business, public service, science, art and many other fields. No single image can capture that range.','Profiles of students, teachers, entrepreneurs, artists and community organisers can help preserve the everyday details behind public achievements: the people who encouraged them, the obstacles they faced and the lessons they learned.','Know someone whose story deserves to be recorded? With their permission, share a short biography, photographs you have rights to use, and reliable details for the editorial team to review.']}
+};
+document.querySelectorAll('[data-story]').forEach(btn=>btn.addEventListener('click',()=>{const s=stories[btn.dataset.story];$('#dialogTag').textContent=s.tag;$('#dialogTitle').textContent=s.title;$('#dialogContent').replaceChildren(...s.paragraphs.map(t=>{const p=document.createElement('p');p.textContent=t;return p;}));$('#storyDialog').showModal();}));
+$('#closeStory').addEventListener('click',()=>$('#storyDialog').close());
+$('#openSubmit').addEventListener('click',()=>$('#submitDialog').showModal());
+$('#closeSubmit').addEventListener('click',()=>$('#submitDialog').close());
+$('#submitForm').addEventListener('submit',e=>{e.preventDefault();const d=new FormData(e.currentTarget);const subject=encodeURIComponent('Story submission: '+d.get('title'));const body=encodeURIComponent('Name: '+d.get('name')+'\nEmail: '+d.get('email')+'\nStory type: '+d.get('type')+'\nTitle: '+d.get('title')+'\n\nStory:\n'+d.get('story')+'\n\nPermission confirmed: '+(d.get('permission')?'Yes':'No'));const mail='mailto:stories@example.com?subject='+subject+'&body='+body;const note=document.createElement('p');note.className='notice';note.textContent='Replace stories@example.com in index.html with your real editorial email before publishing. Your email app will open with this draft.';e.currentTarget.append(note);window.location.href=mail;});
+$('#newsletterForm').addEventListener('submit',e=>{e.preventDefault();alert('Thanks for your interest! This demo does not yet store email subscriptions. Connect a mailing-list service to enable live signups.');});
+</script>
+</body>
+</html>
