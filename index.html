@@ -379,6 +379,84 @@
   .bar, .drawer, .search, .site-footer, .to-top, .story__share, .more, .pager, .progress { display: none !important; }
   body { background: #fff; color: #000; }
 }
+
+/* ===== Ask the archive, media, submissions and admin ===== */
+@layer tokens {
+  :root { --danger: #b3261e; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --danger: #ff8a80; } }
+  :root[data-theme="dark"] { --danger: #ff8a80; }
+}
+
+@layer components {
+  .chip { min-height: 40px; padding-inline: 1rem; border: 1.5px solid var(--rule); border-radius: 999px; background: transparent; color: var(--heading); font-size: .9375rem; font-weight: 500; }
+  .chip:hover { background: var(--green-800); color: #fff; }
+  .media-block { margin-top: var(--space-5); }
+  .media-block h2 { margin-bottom: var(--space-2); font-size: var(--step-2); }
+  .media-grid { display: grid; gap: var(--space-3); }
+  .media-item video, .media-item audio, .media-item img { width: 100%; border-radius: var(--radius); background: var(--line); }
+  .media-item figcaption { margin-top: .375rem; color: var(--muted); font-size: .875rem; }
+  .file-link { display: flex; justify-content: space-between; gap: 1rem; padding: .875rem 1rem; border: 1.5px solid var(--line); border-radius: var(--radius); font-weight: 600; text-decoration: none; }
+  .file-link:hover { border-color: var(--ochre); }
+  .file-link small { color: var(--muted); font-weight: 500; white-space: nowrap; }
+  .field__hint { color: var(--on-green); font-size: .875rem; }
+  .field input[type="file"] { padding: .6rem; }
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .btn--danger { min-height: 44px; padding-inline: 1.25rem; border-color: var(--danger); background: transparent; color: var(--danger); font-size: .9375rem; }
+  .btn--danger:hover { background: var(--danger); color: #fff; }
+  .toast { position: fixed; inset-inline: 1rem; bottom: 5rem; z-index: 60; max-width: 32rem; margin-inline: auto; padding: .875rem 1rem; border-radius: var(--radius); background: var(--green-900); color: #fff; font-weight: 500; box-shadow: 0 6px 24px rgb(0 0 0 / .3); }
+  .toast[data-state="error"] { background: #b3261e; }
+}
+
+@layer sections {
+  .ask { padding-block: var(--space-5); border-bottom: 1px solid var(--line); background: var(--wash); }
+  .ask__head { max-width: 46rem; margin-bottom: var(--space-3); }
+  .ask__tag { margin-bottom: .25rem; color: var(--link); font-size: .9375rem; font-weight: 600; }
+  .ask__head p:last-child { margin-top: .5rem; color: var(--muted); }
+  .ask__form { display: flex; flex-wrap: wrap; gap: .625rem; max-width: 46rem; }
+  .ask__form input { flex: 1 1 260px; min-height: 52px; padding-inline: 1rem; border: 2px solid var(--rule); border-radius: var(--radius); background: var(--field); font-size: 1.0625rem; }
+  .ask__chips { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: var(--space-2); }
+  .ask__answer { max-width: 46rem; margin-top: var(--space-3); padding: var(--space-3); border-inline-start: 6px solid var(--ochre); border-radius: var(--radius); background: var(--paper); }
+  .ask__label { margin-bottom: .375rem; color: var(--link); font-size: .9375rem; font-weight: 600; }
+  .ask__ai { margin-inline-start: .5rem; padding: .125rem .5rem; border-radius: 999px; background: var(--ochre); color: var(--green-900); font-size: .75rem; }
+  .ask__text { margin-bottom: var(--space-2); white-space: pre-line; }
+  .ask__sources { display: grid; gap: .375rem; padding-inline-start: 1.25rem; list-style: decimal; }
+  .ask__sources span { margin-inline-start: .5rem; color: var(--muted); font-size: .875rem; }
+  .cite { color: var(--link); font-weight: 600; text-decoration: none; }
+  .ask__note { max-width: 46rem; margin-top: var(--space-2); color: var(--muted); font-size: .875rem; }
+  .footer__links { display: flex; gap: var(--space-3); }
+
+  #view-admin .container { width: min(960px, 100% - 2.5rem); }
+  .adm-card { max-width: 32rem; }
+  .adm-card h1, .adm-head h1 { margin-bottom: var(--space-2); font-size: var(--step-3); }
+  .adm-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-2); margin-bottom: var(--space-3); }
+  .adm-head__actions, .adm-actions { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .adm-meta { color: var(--muted); font-size: .9375rem; }
+  .adm-tabs { display: flex; gap: .25rem; margin-bottom: var(--space-3); overflow-x: auto; border-bottom: 3px solid var(--rule); }
+  .adm-tabs button { min-height: 48px; padding-inline: 1.25rem; border: 0; border-radius: var(--radius) var(--radius) 0 0; background: transparent; font-weight: 600; white-space: nowrap; }
+  .adm-tabs button[aria-selected="true"] { background: var(--green-800); color: #fff; }
+  .adm-tabs button span { margin-inline-start: .375rem; opacity: .8; }
+  .adm-item { border-bottom: 1px solid var(--line); }
+  .adm-item summary { display: grid; grid-template-columns: 1fr auto; gap: .25rem .75rem; padding-block: var(--space-2); cursor: pointer; list-style: none; }
+  .adm-item summary::-webkit-details-marker { display: none; }
+  .adm-title { font: 700 1.125rem/1.3 var(--font-serif); }
+  .adm-item small { grid-column: 1 / -1; color: var(--muted); }
+  .badge { align-self: start; padding: .125rem .625rem; border: 1px solid var(--line); border-radius: 999px; background: var(--wash); font-size: .8125rem; font-weight: 600; }
+  .badge--published { border-color: #a9d8bb; background: #d7efe0; color: #0b4a26; }
+  .badge--rejected { border-color: #f1b3ac; background: #fbdcd8; color: #7a1710; }
+  .badge--pending { border-color: #ecd48a; background: #fcefc7; color: #6b4a00; }
+  .adm-body { display: grid; gap: var(--space-2); padding-bottom: var(--space-3); }
+  .adm-sum { font-weight: 600; }
+  .adm-text { max-height: 18rem; padding: var(--space-2); overflow: auto; border: 1px solid var(--line); border-radius: var(--radius); background: var(--wash); white-space: pre-wrap; }
+  .adm-media { display: grid; gap: .25rem; }
+  .adm-media a { text-decoration: underline; }
+  .adm-note { display: grid; gap: .25rem; font-size: .9375rem; font-weight: 600; }
+  .adm-note textarea, .adm-form input, .adm-form select, .adm-form textarea { padding: .75rem .875rem; border: 2px solid var(--line); border-radius: var(--radius); background: var(--field); color: var(--ink); font-weight: 400; }
+  .adm-form { max-width: 100%; }
+  .adm-form .form__status, .adm-form .field__hint { color: var(--muted); }
+  .adm-form .form__status[data-state="error"] { color: var(--danger); }
+  .adm-existing { padding: var(--space-2); border: 1.5px solid var(--line); border-radius: var(--radius); }
+  .adm-check { display: flex; align-items: center; gap: .5rem; font-weight: 400; }
+}
 </style>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"The Untold Stories of Fulɓe","url":"https://alfullerty-jpg.github.io/untold-stories-fulbe/"}</script>
 </head>
@@ -393,7 +471,7 @@
       </button>
       <a class="bar__logo" href="#/">The Untold Stories of Fulɓe</a>
       <nav class="bar__nav" aria-label="Quick links">
-        <a href="#latest">Stories</a><a href="#timeline">Timeline</a><a href="#/page/heartlands">Heartlands</a><a href="#/page/about">About</a>
+        <a href="#ask">Ask</a><a href="#latest">Stories</a><a href="#timeline">Timeline</a><a href="#/page/heartlands">Heartlands</a><a href="#/page/about">About</a>
       </nav>
       <button class="bar__icon" id="search-btn" type="button" aria-haspopup="dialog" aria-label="Search the site"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg></button>
       <a class="btn btn--primary bar__cta" href="#submit">Submit a story</a>
@@ -416,6 +494,25 @@
           <ul class="facts" id="facts"></ul>
         </div>
       </section>
+
+      <section class="ask" id="ask" aria-labelledby="ask-title">
+        <div class="container">
+          <div class="ask__head">
+            <p class="ask__tag">Quick answers</p>
+            <h2 id="ask-title">Ask the archive</h2>
+            <p>Ask a question in plain words. The answer is written from the stories, timeline and pages on this site, with links to its sources.</p>
+          </div>
+          <form class="ask__form" id="ask-form">
+            <label class="visually-hidden" for="ask-input">Your question</label>
+            <input id="ask-input" maxlength="300" placeholder="For example: Who was Nana Asma'u?" autocomplete="off" required>
+            <button class="btn btn--primary" type="submit">Ask</button>
+          </form>
+          <div class="ask__chips" id="ask-chips"></div>
+          <div class="ask__answer" id="ask-answer" role="status" aria-live="polite" hidden></div>
+          <p class="ask__note" id="ask-note"></p>
+        </div>
+      </section>
+
       <section class="section" aria-labelledby="latest-title">
         <div class="container">
           <div class="front" id="front"></div>
@@ -497,17 +594,19 @@
             <p>Do you have a family memory, historical account, photograph or piece of knowledge worth preserving? Students, elders, researchers, artists and community members are all welcome.</p>
           </header>
           <form class="form" id="story-form" novalidate>
-            <div class="field"><label for="f-name">Your name</label><input id="f-name" name="name" required autocomplete="name"></div>
-            <div class="field"><label for="f-email">Your email</label><input id="f-email" name="email" type="email" required autocomplete="email"></div>
-            <div class="field"><label for="f-type">Story type</label>
-              <select id="f-type" name="type"><option>Family or oral history</option><option>Culture and tradition</option><option>Personal experience</option><option>Research or historical account</option><option>Photo or archive contribution</option><option>Other</option></select>
+            <div class="field"><label for="f-name">Your name</label><input id="f-name" name="name" required maxlength="120" autocomplete="name"></div>
+            <div class="field"><label for="f-email">Your email (kept private)</label><input id="f-email" name="email" type="email" required autocomplete="email"></div>
+            <div class="field"><label for="f-cat">Theme</label>
+              <select id="f-cat" name="category"><option>Community</option><option>History</option><option>Culture</option><option>Language</option><option>Achievements</option></select>
             </div>
-            <div class="field"><label for="f-title">Story title</label><input id="f-title" name="title" required></div>
-            <div class="field field--full"><label for="f-story">Your story or summary</label><textarea id="f-story" name="story" required></textarea></div>
+            <div class="field"><label for="f-title">Story title</label><input id="f-title" name="title" required minlength="3" maxlength="200"></div>
+            <div class="field field--full"><label for="f-story">Your story</label><textarea id="f-story" name="story" required minlength="40"></textarea></div>
+            <div class="field field--full" id="f-files-field"><label for="f-files">Photos, video, audio or documents</label><input id="f-files" type="file" multiple accept="image/*,video/*,audio/*,.pdf,.doc,.docx,.txt"><p class="field__hint" id="f-hint"></p></div>
+            <div class="hp" aria-hidden="true"><label>Leave this empty<input name="website" tabindex="-1" autocomplete="off"></label></div>
             <div class="field field--full field--check"><input id="f-consent" name="consent" type="checkbox" required><label for="f-consent">I have the right to share this material, and I understand the editors may contact me to verify it.</label></div>
             <div class="field--full">
-              <button class="btn btn--primary" type="submit">Open email draft</button>
-              <p class="form__status" id="form-status" role="status" aria-live="polite">This opens a draft in your email app. Nothing is stored on a server.</p>
+              <button class="btn btn--primary" id="submit-btn" type="submit">Send for review</button>
+              <p class="form__status" id="form-status" role="status" aria-live="polite"></p>
             </div>
           </form>
         </div>
@@ -533,6 +632,9 @@
     <article class="section" id="view-page" hidden>
       <div class="container container--narrow" id="page-content"></div>
     </article>
+    <article class="section" id="view-admin" hidden>
+      <div class="container" id="admin-content"></div>
+    </article>
   </main>
 
   <footer class="site-footer">
@@ -540,7 +642,7 @@
       <div class="footer__grid" id="footer-grid"></div>
       <div class="footer__bar">
         <p>© <span id="year">2026</span> The Untold Stories of Fulɓe. An independent cultural storytelling project.</p>
-        <a href="#top-of-page" id="footer-top">Back to top</a>
+        <span class="footer__links"><a href="#/admin">Admin</a><a href="#top-of-page" id="footer-top">Back to top</a></span>
       </div>
     </div>
   </footer>
@@ -576,21 +678,28 @@
     <div class="gs" id="gs-results" aria-live="polite"></div>
   </dialog>
 
+  <div class="toast" id="toast" role="status" hidden></div>
+
   <button class="to-top" id="to-top" type="button" aria-label="Back to top" hidden>
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 14 6-6 6 6"/></svg>
   </button>
 
   <script>
 /**
- * Site settings. Edit this file only; no other code needs to change.
+ * Site settings. Edit only this block.
+ *
+ * To switch on the admin dashboard, public submissions with review, file uploads
+ * and the AI assistant, create a free Supabase project (see the setup steps) and
+ * paste its address and public (anon) key below. While they are empty, the site
+ * works as a reading site and the story form opens an email draft.
  */
 window.SITE_CONFIG = {
-  // Where "Submit a story" email drafts are sent.
   contactEmail: "alfullerty@gmail.com",
-
-  // Optional. A form-service URL (for example Formspree or Buttondown).
-  // Leave empty to keep the newsletter section hidden.
-  newsletterEndpoint: ""
+  newsletterEndpoint: "",
+  supabaseUrl: "",       // for example "https://abcdxyz.supabase.co"
+  supabaseAnonKey: "",   // the public "anon" key (safe to publish)
+  aiFunction: "ask",     // name of the AI function; "" turns AI answers off
+  maxUploadMB: 50
 };
   </script>
 
@@ -815,6 +924,10 @@ window.PAGES = {
       <p>We publish only material that contributors have the right to share. Contributors can ask us to change or remove their story at any time.</p>
       <h2>Corrections</h2>
       <p>When we get something wrong, we correct it openly. If you spot an error, <a href="#/page/contact">tell us</a>.</p>
+      <h2>Review before publishing</h2>
+      <p>Stories sent by the public are never published automatically. An editor reads each one, may contact the author to check details, and then accepts or declines it.</p>
+      <h2>Ask the archive</h2>
+      <p>The question box uses AI to write short answers from this site's own stories and pages, with links to the sources. AI can make mistakes, so please check the sources and tell us about any error.</p>
       <h2>Introductory content</h2>
       <p>Some articles are introductory and will be expanded as research and testimony arrive. They are marked with an editorial note.</p>`
   },
@@ -857,6 +970,9 @@ window.PAGES = {
         <details name="faq"><summary>Is Fulfulde the same as Pulaar?</summary><div class="answer"><p>They are closely related varieties of one language. Pulaar is the name used in much of Senegal, Mauritania and Guinea, and Fulfulde is used further east.</p></div></details>
         <details name="faq"><summary>Are all Fulɓe herders?</summary><div class="answer"><p>No. Pastoralism is an important tradition, but Fulɓe have long been scholars, farmers and traders, and today work in every profession. See <a href="#/story/beyond-the-herder-stereotype">One People, Many Lives</a>.</p></div></details>
         <details name="faq"><summary>How can I contribute a story?</summary><div class="answer"><p>Use the <a href="#submit">submission form</a>. An editor may contact you to verify details, and you keep the rights to your work.</p></div></details>
+        <details name="faq"><summary>What happens after I submit a story?</summary><div class="answer"><p>An editor reads it, may contact you to check details, and then publishes or declines it. Your email address is never shown publicly. You can ask us to change or remove your story at any time.</p></div></details>
+        <details name="faq"><summary>Can I upload video, audio or documents?</summary><div class="answer"><p>Yes. The submission form accepts photos, video, audio, PDF and Word files, up to 5 files per story and 50 MB each. Please upload only material you have the right to share.</p></div></details>
+        <details name="faq"><summary>How does Ask the archive work?</summary><div class="answer"><p>It finds the most relevant stories and pages on this site, and an AI assistant writes a short answer from them and shows its sources. It does not search the wider internet, and it can make mistakes.</p></div></details>
         <details name="faq"><summary>Can I quote or republish your articles?</summary><div class="answer"><p>Short quotations with credit are welcome. Please <a href="#/page/contact">contact us</a> before republishing a full article. Photographs from Unsplash carry their own licence.</p></div></details>
         <details name="faq"><summary>How are stories checked?</summary><div class="answer"><p>Read <a href="#/page/standards">How we work</a> for our commitments on evidence, representation and corrections.</p></div></details>
       </div>`
@@ -873,9 +989,11 @@ window.PAGES = {
     lede: "What this website does, and does not do, with your information.",
     html: `
       <ul class="checklist">
-        <li>There are no accounts, advertising trackers or cookies set by this site.</li>
-        <li>Your theme and text-size choices are saved on your own device, and nowhere else.</li>
-        <li>The story form opens a draft in your email app. Nothing is sent to or stored on our server.</li>
+        <li>There are no advertising trackers or cookies set by this site, and visitors do not need an account.</li>
+        <li>Your theme and text-size choices are saved on your own device only.</li>
+        <li>If you send a story through the form, your name, email, text and any files are stored with our hosting provider and read by editors. Your email is never published. If the form opens an email draft instead, the site stores nothing.</li>
+        <li>Questions typed into Ask the archive, together with matching excerpts from this site, are sent to an AI provider to write the answer. Please do not type personal details.</li>
+        <li>Editors sign in with an email and password to review and publish stories.</li>
         <li>Fonts load from Google Fonts and some photos from Unsplash. Those services can see your IP address when they deliver files.</li>
         <li>If a newsletter is offered, your email address is handled by the provider you subscribe through.</li>
       </ul>`
@@ -886,20 +1004,30 @@ window.PAGES = {
   <script>
 /**
  * The Untold Stories of Fulɓe: behaviour.
- * Sections: helpers, navigation data, templates, home, story, page, search,
- *           preferences, chrome (drawer, progress, back to top), router, forms, init.
- * Settings: config.js   Stories: stories-data.js   Home content: content.js   Info pages: pages.js
- * Addresses: #/  #/category/History  #/story/<id>  #/page/<slug>  #about  #submit  #timeline  #words
+ * Sections: setup, helpers, backend, stories, navigation, templates, home, story,
+ *           pages, search, ask (AI), preferences, chrome, admin, forms, router, init.
+ * Settings: window.SITE_CONFIG. Content: STORIES, SITE_CONTENT, PAGES.
+ * Addresses: #/  #/category/History  #/story/<id>  #/page/<slug>  #/admin  #ask  #submit  #timeline  #words
  */
 (() => {
   "use strict";
 
+  /* ---------- Setup ---------- */
   const CONFIG = window.SITE_CONFIG || {};
-  const STORIES = window.STORIES || [];
+  const BUNDLED = window.STORIES || [];
   const CONTENT = window.SITE_CONTENT || {};
   const PAGES = window.PAGES || {};
-  const CATEGORIES = [...new Set(STORIES.map((s) => s.category))];
   const SITE = "The Untold Stories of Fulɓe";
+  const CATEGORY_ORDER = ["History", "Culture", "Language", "Achievements", "Community"];
+  const MAX_MB = CONFIG.maxUploadMB || 50;
+  const MAX_FILES = 5;
+  const FILE_OK = /\.(jpe?g|png|webp|gif|mp4|webm|mov|mp3|m4a|wav|ogg|pdf|docx?|txt)$/i;
+  const SB_CDN = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js";
+  const backend = { on: Boolean(CONFIG.supabaseUrl && CONFIG.supabaseAnonKey), sb: null, user: null, admin: false, loading: false };
+  const admin = { tab: "pending", posts: [], priv: {}, editing: undefined, loaded: false };
+  let remote = [];
+  let STORIES = [...BUNDLED];
+  let index = [];
 
   /* ---------- Helpers ---------- */
   const $ = (selector, root = document) => root.querySelector(selector);
@@ -908,7 +1036,10 @@ window.PAGES = {
     String(value).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const debounce = (fn, wait = 150) => { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), wait); }; };
   const fmtDate = (iso) => new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+  const fmtSize = (b) => (b >= 1048576 ? `${(b / 1048576).toFixed(1)} MB` : `${Math.max(1, Math.round(b / 1024))} KB`);
   const norm = (t) => String(t).toLowerCase().replace(/ɓ/g, "b").replace(/ɗ/g, "d").replace(/ŋ/g, "n").replace(/ƴ/g, "y").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  const strip = (html) => html.replace(/<[^>]+>/g, " ");
+  const slugify = (t) => norm(t).replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 60) || "story";
   const storyHref = (s) => `#/story/${encodeURIComponent(s.id)}`;
   const catHref = (c) => `#/category/${encodeURIComponent(c)}`;
   const pageHref = (slug) => `#/page/${slug}`;
@@ -921,14 +1052,134 @@ window.PAGES = {
     $('meta[name="description"]').content = description;
   };
   const defaultMeta = { title: document.title, description: $('meta[name="description"]').content };
+  let toastTimer;
+  function flash(message, isError = false) {
+    const el = $("#toast");
+    el.textContent = message; el.dataset.state = isError ? "error" : "ok"; el.hidden = false;
+    clearTimeout(toastTimer); toastTimer = setTimeout(() => { el.hidden = true; }, 5000);
+  }
+  const loadScript = (src) => new Promise((resolve, reject) => {
+    const el = document.createElement("script");
+    el.src = src; el.onload = resolve; el.onerror = () => reject(new Error("Could not load " + src));
+    document.head.appendChild(el);
+  });
+
+  /* ---------- Stories: bundled content plus published posts from the database ---------- */
+  const parseBody = (text) => String(text || "").split(/\n{2,}/).map((b) => b.trim()).filter(Boolean)
+    .map((b) => (b.startsWith("## ") ? { h: b.slice(3) } : b.startsWith("> ") ? { q: b.slice(2) } : b.replace(/\n/g, " ")));
+  const mediaBase = () => `${String(CONFIG.supabaseUrl || "").replace(/\/$/, "")}/storage/v1/object/public/media/`;
+  const safeUrl = (u) => backend.on && typeof u === "string" && u.startsWith(mediaBase());
+  const kindOf = (file) => {
+    const t = file.type || "", n = file.name.toLowerCase();
+    if (t.startsWith("image/") || /\.(jpe?g|png|webp|gif)$/.test(n)) return "image";
+    if (t.startsWith("video/") || /\.(mp4|webm|mov)$/.test(n)) return "video";
+    if (t.startsWith("audio/") || /\.(mp3|m4a|wav|ogg)$/.test(n)) return "audio";
+    return "file";
+  };
+
+  function fromPost(p) {
+    const media = (Array.isArray(p.media) ? p.media : []).filter((m) => m && safeUrl(m.url));
+    const cover = media.find((m) => m.type === "image");
+    return {
+      id: p.slug, title: p.title, category: p.category, theme: p.theme || "Community voices", author: p.author,
+      date: p.published_at || p.created_at, summary: p.summary, body: parseBody(p.body), media, remote: true,
+      cover: ["green", "indigo", "ochre"][p.title.length % 3],
+      image: cover ? { src: cover.url, alt: cover.name || p.title, credit: `Image: ${p.author}` } : undefined
+    };
+  }
+
+  function rebuildStories() {
+    STORIES = [...remote, ...BUNDLED].sort((a, b) => new Date(b.date) - new Date(a.date));
+    buildIndex();
+  }
+  const categories = () => {
+    const set = new Set(STORIES.map((s) => s.category));
+    return [...CATEGORY_ORDER.filter((c) => set.has(c)), ...[...set].filter((c) => !CATEGORY_ORDER.includes(c))];
+  };
+  const countIn = (c) => STORIES.filter((s) => s.category === c).length;
+
+  /* ---------- Backend (Supabase): sign-in, posts, uploads ---------- */
+  async function checkAdmin() {
+    backend.admin = false;
+    if (!backend.sb || !backend.user) return;
+    const { data } = await backend.sb.from("admins").select("user_id").eq("user_id", backend.user.id).maybeSingle();
+    backend.admin = Boolean(data);
+  }
+
+  async function loadRemote() {
+    const { data, error } = await backend.sb.from("posts").select("*").eq("status", "published").order("published_at", { ascending: false }).limit(200);
+    if (error) { console.warn("Could not load posts:", error.message); remote = []; return; }
+    remote = data.map(fromPost);
+  }
+
+  async function loadAdminPosts() {
+    const [posts, priv] = await Promise.all([
+      backend.sb.from("posts").select("*").order("created_at", { ascending: false }),
+      backend.sb.from("post_private").select("*")
+    ]);
+    if (posts.error) throw posts.error;
+    admin.posts = posts.data;
+    admin.priv = Object.fromEntries((priv.data || []).map((r) => [r.post_id, r]));
+    admin.loaded = true;
+  }
+
+  async function initBackend() {
+    if (!backend.on) return;
+    backend.loading = true;
+    try {
+      await loadScript(SB_CDN);
+      backend.sb = window.supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseAnonKey);
+      const { data } = await backend.sb.auth.getSession();
+      backend.user = data.session ? data.session.user : null;
+      backend.sb.auth.onAuthStateChange((_event, session) => {
+        setTimeout(async () => {
+          backend.user = session ? session.user : null;
+          admin.loaded = false;
+          await checkAdmin();
+          if (location.hash.startsWith("#/admin")) route({ quiet: true });
+        }, 0);
+      });
+      await Promise.all([checkAdmin(), loadRemote()]);
+    } catch (err) {
+      console.warn("Backend unavailable:", err.message);
+      backend.on = false;
+    } finally {
+      backend.loading = false;
+      rebuildStories(); refreshSubmitUI(); refreshAskNote(); renderFooter(); route({ quiet: true });
+    }
+  }
+
+  function checkFiles(files) {
+    if (files.length > MAX_FILES) return `Please attach up to ${MAX_FILES} files.`;
+    for (const f of files) {
+      if (f.size > MAX_MB * 1048576) return `${f.name} is larger than ${MAX_MB} MB.`;
+      if (!FILE_OK.test(f.name)) return `${f.name} is not a supported file type.`;
+    }
+    return "";
+  }
+
+  async function uploadFiles(files, folder, onProgress) {
+    const out = [];
+    for (const [i, f] of [...files].entries()) {
+      if (onProgress) onProgress(i + 1, files.length);
+      const ext = (f.name.split(".").pop() || "bin").toLowerCase().replace(/[^a-z0-9]/g, "");
+      const path = `${folder}/${crypto.randomUUID()}.${ext}`;
+      const { error } = await backend.sb.storage.from("media").upload(path, f, { contentType: f.type || undefined, upsert: false });
+      if (error) throw new Error(`${f.name}: ${error.message}`);
+      const { data } = backend.sb.storage.from("media").getPublicUrl(path);
+      out.push({ type: kindOf(f), url: data.publicUrl, name: f.name.slice(0, 120), size: f.size, path });
+    }
+    return out;
+  }
+  const SAFE_PATH = /^(pending|posts)\/[0-9a-f-]{36}\/[0-9a-f-]{36}\.[a-z0-9]+$/;
 
   /* ---------- Navigation data (drives the menu drawer and the footer) ---------- */
-  const countIn = (c) => STORIES.filter((s) => s.category === c).length;
   const navGroups = () => [
-    { title: "Stories by theme", items: CATEGORIES.map((c) => ({ label: c, href: catHref(c), key: c, count: countIn(c) })) },
+    { title: "Stories by theme", items: categories().map((c) => ({ label: c, href: catHref(c), key: c, count: countIn(c) })) },
     { title: "Explore", items: [
-      { label: "Timeline", href: "#timeline" }, { label: "Heartlands", href: pageHref("heartlands") },
-      { label: "Words to know", href: "#words" }, { label: "Reading list", href: pageHref("resources") }] },
+      { label: "Ask the archive", href: "#ask" }, { label: "Timeline", href: "#timeline" },
+      { label: "Heartlands", href: pageHref("heartlands") }, { label: "Words to know", href: "#words" },
+      { label: "Reading list", href: pageHref("resources") }] },
     { title: "Take part", items: [{ label: "Submit a story", href: "#submit" }, { label: "Contact", href: pageHref("contact") }] },
     { title: "About", items: [
       { label: "About the project", href: pageHref("about") }, { label: "How we work", href: pageHref("standards") },
@@ -995,13 +1246,15 @@ window.PAGES = {
   const state = { category: "All", query: "" };
 
   function renderHome() {
+    const cats = categories();
     const pool = STORIES.filter((s) => state.category === "All" || s.category === state.category)
       .filter((s) => norm(`${s.title} ${s.summary} ${s.category} ${s.theme}`).includes(state.query));
     const browsing = state.category === "All" && !state.query;
     $("#intro").hidden = !browsing;
+    $("#ask").hidden = !browsing;
     $("#explore").hidden = !browsing;
     $("#themes-wrap").hidden = !browsing;
-    $("#themes").innerHTML = CATEGORIES.map((c) => {
+    $("#themes").innerHTML = cats.map((c) => {
       const n = countIn(c);
       return `<li><a class="tile" href="${catHref(c)}"><span class="tile__name">${esc(c)}</span><span class="tile__count">${n} ${n === 1 ? "story" : "stories"}</span></a></li>`;
     }).join("");
@@ -1033,12 +1286,23 @@ window.PAGES = {
     $("#tl-next").addEventListener("click", () => scroll(1));
   }
 
-  /* ---------- Story view ---------- */
+  /* ---------- Story view (text, photos, video, audio and files) ---------- */
   function bodyHTML(s) {
     const blocks = (s.body || []).map((b) =>
       typeof b === "string" ? `<p>${esc(b)}</p>` : b.q ? `<blockquote class="pullquote"><p>${esc(b.q)}</p></blockquote>` : `<h2>${esc(b.h)}</h2>`).join("");
-    const note = `<p class="editorial-note">Editorial note: this is introductory content. Check historical claims against reliable sources and community testimony before publication.</p>`;
+    const note = s.remote ? "" : `<p class="editorial-note">Editorial note: this is introductory content. Check historical claims against reliable sources and community testimony before publication.</p>`;
     return `<p class="story__lede">${esc(s.summary)}</p>${blocks}${note}`;
+  }
+
+  function mediaHTML(s) {
+    const items = (s.media || []).filter((m) => !(s.image && s.image.src === m.url)).map((m) => {
+      const u = esc(m.url), n = esc(m.name || "File");
+      if (m.type === "video") return `<figure class="media-item"><video controls preload="metadata" src="${u}"></video><figcaption>${n}</figcaption></figure>`;
+      if (m.type === "audio") return `<figure class="media-item"><audio controls preload="none" src="${u}"></audio><figcaption>${n}</figcaption></figure>`;
+      if (m.type === "image") return `<figure class="media-item"><a href="${u}" target="_blank" rel="noopener"><img src="${u}" alt="${n}" loading="lazy"></a><figcaption>${n}</figcaption></figure>`;
+      return `<a class="file-link" href="${u}" target="_blank" rel="noopener" download><span>${n}</span><small>${m.size ? fmtSize(m.size) : "Download"}</small></a>`;
+    });
+    return items.length ? `<section class="media-block" aria-labelledby="media-title"><h2 id="media-title">Videos, audio and files</h2><div class="media-grid">${items.join("")}</div></section>` : "";
   }
 
   function renderStory(s) {
@@ -1060,6 +1324,7 @@ window.PAGES = {
         </div>
         <figure><div class="media">${img(s, false)}</div><figcaption>${esc((s.image && s.image.credit) || "")}</figcaption></figure>
         <div class="prose">${bodyHTML(s)}</div>
+        ${mediaHTML(s)}
         <nav class="pager" aria-label="More stories">${pager(newer, "Newer story")}${pager(older, "Older story")}</nav>
         <section class="more" aria-labelledby="more-title"><h2 id="more-title">Keep reading</h2>${more.map(sideHTML).join("")}</section>
       </div>`;
@@ -1093,14 +1358,17 @@ window.PAGES = {
     setMeta(`${p.title} | ${SITE}`, p.lede);
   }
 
-  /* ---------- Site search (stories, words, pages) ---------- */
-  const strip = (html) => html.replace(/<[^>]+>/g, " ");
-  const index = [
-    ...STORIES.map((s) => ({ type: "Stories", title: s.title, sub: s.summary, href: storyHref(s),
-      text: norm(`${s.title} ${s.summary} ${s.category} ${s.theme} ${(s.body || []).map((b) => (typeof b === "string" ? b : b.h || b.q || "")).join(" ")}`) })),
-    ...(CONTENT.words || []).map((w) => ({ type: "Words", title: w.term, sub: w.meaning, href: "#words", text: norm(`${w.term} ${w.meaning}`) })),
-    ...Object.entries(PAGES).map(([slug, p]) => ({ type: "Pages", title: p.title, sub: p.lede, href: pageHref(slug), text: norm(`${p.title} ${p.lede} ${strip(p.html)}`) }))
-  ];
+  /* ---------- Search index (stories, words, timeline, pages) ---------- */
+  function buildIndex() {
+    const bodyText = (s) => (s.body || []).map((b) => (typeof b === "string" ? b : b.h || b.q || "")).join("\n");
+    index = [
+      ...STORIES.map((s) => ({ type: "Stories", title: s.title, sub: s.summary, href: storyHref(s), raw: `${s.summary}\n${bodyText(s)}\n${s.category} ${s.theme}` })),
+      ...(CONTENT.words || []).map((w) => ({ type: "Words", title: w.term, sub: w.meaning, href: "#words", raw: `${w.term}: ${w.meaning}` })),
+      ...(CONTENT.timeline || []).map((t) => ({ type: "Timeline", title: `${t.year}: ${t.title}`, sub: t.text, href: "#timeline", raw: `${t.year}, ${t.title}: ${t.text}` })),
+      ...Object.entries(PAGES).map(([slug, p]) => ({ type: "Pages", title: p.title, sub: p.lede, href: pageHref(slug), raw: `${p.lede}\n${strip(p.html)}` }))
+    ].map((e) => ({ ...e, text: norm(`${e.title} ${e.raw}`), ntitle: norm(e.title) }));
+  }
+
   const searchDialog = $("#search-dialog");
   const gsInput = $("#gs-input");
   const gsResults = $("#gs-results");
@@ -1108,17 +1376,17 @@ window.PAGES = {
   function renderSearch() {
     const tokens = norm(gsInput.value).split(/\s+/).filter(Boolean);
     if (!tokens.length) {
-      const tips = [["Pulaaku", "#/story/pulaaku-the-code"], ["Sokoto Caliphate", "#/story/history-beyond-headlines"], ["Adlam alphabet", "#/story/adlam-alphabet"], ["Timeline", "#timeline"], ["Heartlands", pageHref("heartlands")]];
+      const tips = [["Ask the archive", "#ask"], ["Pulaaku", "#/story/pulaaku-the-code"], ["Adlam alphabet", "#/story/adlam-alphabet"], ["Timeline", "#timeline"], ["Heartlands", pageHref("heartlands")]];
       gsResults.innerHTML = `<h3 class="gs__group">Try searching for</h3><ul>${tips.map(([l, h]) => `<li><a href="${h}"><strong>${esc(l)}</strong></a></li>`).join("")}</ul>`;
       return;
     }
     const hits = index.filter((e) => tokens.every((t) => e.text.includes(t)))
-      .sort((a, b) => Number(norm(b.title).includes(tokens[0])) - Number(norm(a.title).includes(tokens[0])));
+      .sort((a, b) => Number(b.ntitle.includes(tokens[0])) - Number(a.ntitle.includes(tokens[0])));
     if (!hits.length) {
-      gsResults.innerHTML = `<p class="empty">No results for “${esc(gsInput.value.trim())}”. Try another word, such as pulaaku or Sokoto.</p>`;
+      gsResults.innerHTML = `<p class="empty">No results for “${esc(gsInput.value.trim())}”. Try another word, or <a href="#ask">ask the archive</a>.</p>`;
       return;
     }
-    gsResults.innerHTML = ["Stories", "Words", "Pages"].map((type) => {
+    gsResults.innerHTML = ["Stories", "Words", "Timeline", "Pages"].map((type) => {
       const group = hits.filter((h) => h.type === type).slice(0, 6);
       return group.length ? `<h3 class="gs__group">${type}</h3><ul>${group.map((h) => `<li><a href="${h.href}"><strong>${esc(h.title)}</strong><span>${esc(h.sub)}</span></a></li>`).join("")}</ul>` : "";
     }).join("");
@@ -1130,122 +1398,4 @@ window.PAGES = {
     gsInput.focus(); gsInput.select(); renderSearch();
   }
   gsInput.addEventListener("input", debounce(renderSearch, 120));
-  $("#search-form").addEventListener("submit", (event) => { event.preventDefault(); const first = $("a", gsResults); if (first) first.click(); });
-  $("#gs-close").addEventListener("click", () => searchDialog.close());
-  searchDialog.addEventListener("click", (event) => { if (event.target === searchDialog || event.target.closest("a")) searchDialog.close(); });
-  $("#search-btn").addEventListener("click", openSearch);
-  $("#drawer-search").addEventListener("click", openSearch);
-  document.addEventListener("keydown", (event) => {
-    const typing = /^(INPUT|TEXTAREA|SELECT)$/.test(event.target.tagName);
-    if ((event.key === "/" && !typing) || ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k")) { event.preventDefault(); openSearch(); }
-  });
-
-  /* ---------- Preferences: theme and text size ---------- */
-  const root = document.documentElement;
-  function applyPrefs() {
-    const theme = store.get("fulbe-theme") || "auto";
-    const text = store.get("fulbe-text") || "md";
-    if (theme === "auto") delete root.dataset.theme; else root.dataset.theme = theme;
-    if (text === "md") delete root.dataset.text; else root.dataset.text = text;
-    $$("[data-theme-set]").forEach((b) => b.setAttribute("aria-pressed", b.dataset.themeSet === theme));
-    $$("[data-text-set]").forEach((b) => b.setAttribute("aria-pressed", b.dataset.textSet === text));
-  }
-  $$("[data-theme-set]").forEach((b) => b.addEventListener("click", () => { store.set("fulbe-theme", b.dataset.themeSet); applyPrefs(); }));
-  $$("[data-text-set]").forEach((b) => b.addEventListener("click", () => { store.set("fulbe-text", b.dataset.textSet); applyPrefs(); }));
-
-  /* ---------- Chrome: drawer, reading progress, back to top ---------- */
-  const drawer = $("#drawer");
-  $("#menu-btn").addEventListener("click", () => drawer.showModal());
-  $("#drawer-close").addEventListener("click", () => drawer.close());
-  drawer.addEventListener("click", (event) => { if (event.target === drawer || event.target.closest("a")) drawer.close(); });
-
-  const viewHome = $("#view-home"), viewStory = $("#view-story"), viewPage = $("#view-page");
-  const progress = $("#progress");
-  const toTop = $("#to-top");
-  function onScroll() {
-    const max = document.documentElement.scrollHeight - window.innerHeight;
-    const ratio = viewStory.hidden || max <= 0 ? 0 : Math.min(window.scrollY / max, 1);
-    progress.style.transform = `scaleX(${ratio})`;
-    toTop.hidden = window.scrollY < 700;
-  }
-  window.addEventListener("scroll", () => requestAnimationFrame(onScroll), { passive: true });
-  const goTop = () => window.scrollTo({ top: 0 });
-  toTop.addEventListener("click", goTop);
-  $("#footer-top").addEventListener("click", (event) => { event.preventDefault(); goTop(); });
-
-  /* ---------- Router ---------- */
-  let firstRoute = true;
-
-  function route() {
-    const hash = decodeURIComponent(location.hash.slice(1));
-    const initial = firstRoute; firstRoute = false;
-    if (drawer.open) drawer.close();
-
-    const story = hash.startsWith("/story/") && STORIES.find((s) => s.id === hash.slice(7));
-    const page = hash.startsWith("/page/") && PAGES[hash.slice(6)] && hash.slice(6);
-    viewStory.hidden = !story; viewPage.hidden = !page; viewHome.hidden = Boolean(story || page);
-
-    if (story || page) {
-      if (story) { renderStory(story); renderNav(story.category); } else { renderPage(page); renderNav(pageHref(page)); }
-      window.scrollTo(0, 0); $("#view-title").focus({ preventScroll: true });
-      return;
-    }
-    let anchor = null;
-    if (hash.startsWith("/category/")) state.category = CATEGORIES.includes(hash.slice(10)) ? hash.slice(10) : "All";
-    else if (hash === "" || hash.startsWith("/")) state.category = "All";
-    else { anchor = hash; state.category = "All"; }
-
-    setMeta(defaultMeta.title, defaultMeta.description);
-    renderNav(anchor ? null : state.category); renderHome();
-    const target = anchor && document.getElementById(anchor);
-    if (target) target.scrollIntoView(); else if (!initial || hash) window.scrollTo(0, 0);
-  }
-
-  /* ---------- Forms ---------- */
-  const setStatus = (el, message, kind = "info") => { el.textContent = message; el.dataset.state = kind; };
-
-  const storyForm = $("#story-form");
-  const storyStatus = $("#form-status");
-  storyForm.addEventListener("submit", (event) => {
-    event.preventDefault();
-    if (!storyForm.checkValidity()) {
-      storyForm.reportValidity();
-      return setStatus(storyStatus, "Please complete every required field.", "error");
-    }
-    if (!CONFIG.contactEmail || CONFIG.contactEmail.includes("example.com")) {
-      return setStatus(storyStatus, "Submissions are not set up yet. Add your email in js/config.js.", "error");
-    }
-    const d = new FormData(storyForm);
-    const body = `Name: ${d.get("name")}\nEmail: ${d.get("email")}\nType: ${d.get("type")}\n\n${d.get("story")}`;
-    location.href = `mailto:${CONFIG.contactEmail}?subject=${encodeURIComponent("Story submission: " + d.get("title"))}&body=${encodeURIComponent(body)}`;
-    setStatus(storyStatus, "Your email app should open with the draft. Send it to complete your submission.");
-  });
-
-  const newsForm = $("#news-form");
-  const newsStatus = $("#news-status");
-  if (CONFIG.newsletterEndpoint) {
-    $("#newsletter").hidden = false;
-    newsForm.addEventListener("submit", async (event) => {
-      event.preventDefault();
-      setStatus(newsStatus, "Subscribing…");
-      try {
-        const res = await fetch(CONFIG.newsletterEndpoint, { method: "POST", body: new FormData(newsForm), headers: { Accept: "application/json" } });
-        if (!res.ok) throw new Error(res.statusText);
-        newsForm.reset(); setStatus(newsStatus, "Thank you. You are subscribed.");
-      } catch { setStatus(newsStatus, "Subscription failed. Please try again later.", "error"); }
-    });
-  }
-
-  /* ---------- Init ---------- */
-  $("#year").textContent = new Date().getFullYear();
-  $("#today").textContent = new Date().toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
-  applyPrefs();
-  renderFooter();
-  renderContent();
-  window.addEventListener("hashchange", () => { route(); onScroll(); });
-  route();
-  onScroll();
-})();
-  </script>
-</body>
-</html>
+  $("#search-form").addEventListener("submit", (event) => { event.preventDefault(); const first = $("a", gsResults); if (first
