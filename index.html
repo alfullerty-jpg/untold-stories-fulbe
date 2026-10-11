@@ -1398,4 +1398,385 @@ window.PAGES = {
     gsInput.focus(); gsInput.select(); renderSearch();
   }
   gsInput.addEventListener("input", debounce(renderSearch, 120));
-  $("#search-form").addEventListener("submit", (event) => { event.preventDefault(); const first = $("a", gsResults); if (first
+  $("#search-form").addEventListener("submit", (event) => { event.preventDefault(); const first = $("a", gsResults); if (first) first.click(); });
+  $("#gs-close").addEventListener("click", () => searchDialog.close());
+  searchDialog.addEventListener("click", (event) => { if (event.target === searchDialog || event.target.closest("a")) searchDialog.close(); });
+  $("#search-btn").addEventListener("click", openSearch);
+  $("#drawer-search").addEventListener("click", openSearch);
+  document.addEventListener("keydown", (event) => {
+    const typing = /^(INPUT|TEXTAREA|SELECT)$/.test(event.target.tagName);
+    if ((event.key === "/" && !typing) || ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k")) { event.preventDefault(); openSearch(); }
+  });
+
+  /* ---------- Ask the archive (AI quick search) ---------- */
+  const STOP = new Set(["the", "and", "was", "were", "who", "what", "when", "where", "why", "how", "does", "did", "about", "for", "with", "from", "this", "that", "tell", "are", "fulbe", "fulani", "people"]);
+  function retrieve(question, limit = 5) {
+    const tokens = norm(question).split(/[^a-z0-9']+/).filter((t) => t.length > 2 && !STOP.has(t));
+    if (!tokens.length) return [];
+    return index
+      .map((e) => ({ e, score: tokens.reduce((n, t) => n + (e.ntitle.includes(t) ? 4 : 0) + (e.text.includes(t) ? 1 : 0), 0) }))
+      .filter((r) => r.score > 0).sort((a, b) => b.score - a.score).slice(0, limit).map((r) => r.e);
+  }
+
+  async function ask(question) {
+    const box = $("#ask-answer");
+    box.hidden = false;
+    box.innerHTML = `<p class="ask__label">Searching the archive…</p>`;
+    const found = retrieve(question);
+    if (!found.length) {
+      box.innerHTML = `<p>Nothing in the archive matches that yet. Try different words, or <a href="#submit">share what you know</a>.</p>`;
+      return;
+    }
+    const list = `<ol class="ask__sources">${found.map((e) => `<li><a href="${e.href}">${esc(e.title)}</a><span>${esc(e.type)}</span></li>`).join("")}</ol>`;
+    if (!(backend.on && backend.sb && CONFIG.aiFunction)) {
+      box.innerHTML = `<p class="ask__label">Best matches</p>${list}`;
+      return;
+    }
+    try {
+      const sources = found.map((e, n) => ({ id: n + 1, title: e.title, text: e.raw.slice(0, 1800) }));
+      const { data, error } = await backend.sb.functions.invoke(CONFIG.aiFunction, { body: { question, sources } });
+      if (error || !data || !data.answer) throw new Error(error ? error.message : "No answer");
+      const text = esc(data.answer).replace(/\[(\d+)\]/g, (m, n) => (found[n - 1] ? `<a class="cite" href="${found[n - 1].href}">[${n}]</a>` : m));
+      box.innerHTML = `<p class="ask__label">Answer <span class="ask__ai">AI-generated</span></p><div class="ask__text">${text}</div><p class="ask__label">Sources</p>${list}`;
+    } catch {
+      box.innerHTML = `<p class="ask__label">The assistant is not available right now. Best matches:</p>${list}`;
+    }
+  }
+
+  function initAsk() {
+    const chips = ["Who was Nana Asma'u?", "What is pulaaku?", "What is the Adlam alphabet?", "Where do the Fulɓe live?"];
+    $("#ask-chips").innerHTML = chips.map((c) => `<button type="button" class="chip">${esc(c)}</button>`).join("");
+    const input = $("#ask-input");
+    $("#ask-chips").addEventListener("click", (event) => {
+      const chip = event.target.closest(".chip");
+      if (chip) { input.value = chip.textContent; ask(chip.textContent); }
+    });
+    $("#ask-form").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const q = input.value.trim();
+      if (q) ask(q);
+    });
+    refreshAskNote();
+  }
+  function refreshAskNote() {
+    $("#ask-note").textContent = backend.on && CONFIG.aiFunction
+      ? "Answers are written by AI from this site's own stories and pages. They can contain mistakes, so check the sources. Please do not type personal details."
+      : "Showing the best matching stories and pages.";
+  }
+
+  /* ---------- Preferences: theme and text size ---------- */
+  const root = document.documentElement;
+  function applyPrefs() {
+    const theme = store.get("fulbe-theme") || "auto";
+    const text = store.get("fulbe-text") || "md";
+    if (theme === "auto") delete root.dataset.theme; else root.dataset.theme = theme;
+    if (text === "md") delete root.dataset.text; else root.dataset.text = text;
+    $$("[data-theme-set]").forEach((b) => b.setAttribute("aria-pressed", b.dataset.themeSet === theme));
+    $$("[data-text-set]").forEach((b) => b.setAttribute("aria-pressed", b.dataset.textSet === text));
+  }
+  $$("[data-theme-set]").forEach((b) => b.addEventListener("click", () => { store.set("fulbe-theme", b.dataset.themeSet); applyPrefs(); }));
+  $$("[data-text-set]").forEach((b) => b.addEventListener("click", () => { store.set("fulbe-text", b.dataset.textSet); applyPrefs(); }));
+
+  /* ---------- Chrome: drawer, reading progress, back to top ---------- */
+  const drawer = $("#drawer");
+  $("#menu-btn").addEventListener("click", () => drawer.showModal());
+  $("#drawer-close").addEventListener("click", () => drawer.close());
+  drawer.addEventListener("click", (event) => { if (event.target === drawer || event.target.closest("a")) drawer.close(); });
+
+  const viewHome = $("#view-home"), viewStory = $("#view-story"), viewPage = $("#view-page"), viewAdmin = $("#view-admin");
+  const progress = $("#progress");
+  const toTop = $("#to-top");
+  function onScroll() {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const ratio = viewStory.hidden || max <= 0 ? 0 : Math.min(window.scrollY / max, 1);
+    progress.style.transform = `scaleX(${ratio})`;
+    toTop.hidden = window.scrollY < 700;
+  }
+  window.addEventListener("scroll", () => requestAnimationFrame(onScroll), { passive: true });
+  const goTop = () => window.scrollTo({ top: 0 });
+  toTop.addEventListener("click", goTop);
+  $("#footer-top").addEventListener("click", (event) => { event.preventDefault(); goTop(); });
+
+  /* ---------- Admin: sign in, review, publish, edit, delete ---------- */
+  const adminBox = $("#admin-content");
+  const CATS = CATEGORY_ORDER;
+  const catOptions = (selected) => CATS.map((c) => `<option${c === selected ? " selected" : ""}>${c}</option>`).join("");
+
+  function renderAdmin() {
+    if (!backend.on) {
+      adminBox.innerHTML = `<div class="adm-card"><h1>Admin</h1><p>The admin tools need the online database to be connected. Add your Supabase address and key in the settings block at the top of the page's code, then reload.</p></div>`;
+    } else if (backend.loading || !backend.sb) {
+      adminBox.innerHTML = `<div class="adm-card"><h1>Admin</h1><p>Loading…</p></div>`;
+    } else if (!backend.user) {
+      adminBox.innerHTML = `<div class="adm-card"><h1>Admin sign in</h1>
+        <form class="form adm-form" id="login-form">
+          <div class="field field--full"><label for="a-email">Email</label><input id="a-email" type="email" required autocomplete="username"></div>
+          <div class="field field--full"><label for="a-pass">Password</label><input id="a-pass" type="password" required autocomplete="current-password"></div>
+          <div class="field--full"><button class="btn btn--dark" type="submit">Sign in</button><p class="form__status" id="login-status" role="status"></p></div>
+        </form></div>`;
+    } else if (!backend.admin) {
+      adminBox.innerHTML = `<div class="adm-card"><h1>Admin</h1><p>You are signed in as ${esc(backend.user.email)}, but this account is not an editor. Ask the site owner to add you.</p><button class="btn btn--outline" data-act="signout">Sign out</button></div>`;
+    } else if (admin.editing !== undefined) {
+      renderEditor(admin.editing);
+    } else if (!admin.loaded) {
+      adminBox.innerHTML = `<div class="adm-card"><h1>Admin</h1><p>Loading posts…</p></div>`;
+      loadAdminPosts().then(renderAdmin).catch((e) => { adminBox.innerHTML = `<div class="adm-card"><p>Could not load posts: ${esc(e.message)}</p></div>`; });
+    } else {
+      renderDashboard();
+    }
+  }
+
+  function renderDashboard() {
+    const tabs = [["pending", "To review"], ["published", "Published"], ["rejected", "Rejected"]];
+    const count = (s) => admin.posts.filter((p) => p.status === s).length;
+    const list = admin.posts.filter((p) => p.status === admin.tab);
+    adminBox.innerHTML = `
+      <div class="adm-head">
+        <div><h1>Editor dashboard</h1><p class="adm-meta">Signed in as ${esc(backend.user.email)}</p></div>
+        <div class="adm-head__actions"><button class="btn btn--primary" data-act="new">New post</button><button class="btn btn--outline" data-act="signout">Sign out</button></div>
+      </div>
+      <div class="adm-tabs" role="tablist">${tabs.map(([k, l]) => `<button role="tab" aria-selected="${admin.tab === k}" data-tab="${k}">${l} <span>${count(k)}</span></button>`).join("")}</div>
+      <div class="adm-list">${list.length ? list.map(adminItem).join("") : `<p class="empty">Nothing here yet.</p>`}</div>`;
+  }
+
+  function adminItem(p) {
+    const priv = admin.priv[p.id] || {};
+    const media = (p.media || []).filter((m) => m && safeUrl(m.url));
+    return `<details class="adm-item" data-id="${esc(p.id)}">
+      <summary><span class="adm-title">${esc(p.title)}</span><span class="badge badge--${esc(p.status)}">${esc(p.status)}</span>
+        <small>${esc(p.category)} · ${esc(p.author)} · ${fmtDate(p.created_at)}${p.source === "public" ? " · public submission" : ""}</small></summary>
+      <div class="adm-body">
+        <p class="adm-sum">${esc(p.summary)}</p>
+        <div class="adm-text">${esc(p.body)}</div>
+        ${media.length ? `<ul class="adm-media">${media.map((m) => `<li>${esc(m.type)}: <a href="${esc(m.url)}" target="_blank" rel="noopener">${esc(m.name || "file")}</a></li>`).join("")}</ul>` : ""}
+        ${priv.author_email ? `<p class="adm-meta">Contact: <a href="mailto:${esc(priv.author_email)}">${esc(priv.author_email)}</a></p>` : ""}
+        <label class="adm-note">Private note (optional)<textarea data-note>${esc(priv.review_note || "")}</textarea></label>
+        <div class="adm-actions">
+          ${p.status !== "published" ? `<button class="btn btn--primary" data-act="approve">Publish</button>` : `<button class="btn btn--outline" data-act="unpublish">Unpublish</button>`}
+          ${p.status !== "rejected" ? `<button class="btn btn--outline" data-act="reject">Reject</button>` : ""}
+          <button class="btn btn--outline" data-act="edit">Edit</button>
+          <button class="btn btn--danger" data-act="delete">Delete</button>
+        </div>
+      </div></details>`;
+  }
+
+  function renderEditor(post) {
+    const p = post || { title: "", category: "Culture", theme: "", author: "Editorial Team", summary: "", body: "", status: "published", media: [] };
+    const media = (p.media || []).filter((m) => m && safeUrl(m.url));
+    adminBox.innerHTML = `
+      <div class="adm-head"><h1>${post ? "Edit post" : "New post"}</h1><button class="btn btn--outline" data-act="cancel">Cancel</button></div>
+      <form class="form adm-form" id="editor-form">
+        <div class="field field--full"><label for="e-title">Title</label><input id="e-title" required maxlength="200" value="${esc(p.title)}"></div>
+        <div class="field"><label for="e-cat">Theme</label><select id="e-cat">${catOptions(p.category)}</select></div>
+        <div class="field"><label for="e-theme">Sub-theme (optional)</label><input id="e-theme" maxlength="80" value="${esc(p.theme || "")}"></div>
+        <div class="field"><label for="e-author">Author</label><input id="e-author" required maxlength="120" value="${esc(p.author)}"></div>
+        <div class="field"><label for="e-status">Status</label><select id="e-status"><option value="published"${p.status === "published" ? " selected" : ""}>Published</option><option value="pending"${p.status === "pending" ? " selected" : ""}>Draft (not public)</option><option value="rejected"${p.status === "rejected" ? " selected" : ""}>Rejected</option></select></div>
+        <div class="field field--full"><label for="e-summary">Summary (one or two sentences)</label><textarea id="e-summary" required minlength="10" maxlength="600" rows="3">${esc(p.summary)}</textarea></div>
+        <div class="field field--full"><label for="e-body">Story text</label><textarea id="e-body" required minlength="20" rows="14">${esc(p.body)}</textarea>
+          <p class="field__hint">Leave a blank line between paragraphs. Start a line with ## for a subheading, or &gt; for a pull quote.</p></div>
+        ${media.length ? `<fieldset class="field field--full adm-existing"><legend>Attached files (tick to remove)</legend>${media.map((m, i) => `<label class="adm-check"><input type="checkbox" data-remove="${i}"> ${esc(m.type)}: ${esc(m.name || "file")}</label>`).join("")}</fieldset>` : ""}
+        <div class="field field--full"><label for="e-files">Add photos, video, audio or documents</label><input id="e-files" type="file" multiple accept="image/*,video/*,audio/*,.pdf,.doc,.docx,.txt"><p class="field__hint">Up to ${MAX_FILES} files, ${MAX_MB} MB each. The first photo becomes the cover image.</p></div>
+        <div class="field--full"><button class="btn btn--dark" type="submit">Save post</button><p class="form__status" id="editor-status" role="status"></p></div>
+      </form>`;
+  }
+
+  async function saveEditor() {
+    const status = $("#editor-status"), post = admin.editing;
+    const files = [...$("#e-files").files];
+    const problem = checkFiles(files);
+    if (problem) { status.textContent = problem; status.dataset.state = "error"; return; }
+    const btn = $("#editor-form button[type=submit]"); btn.disabled = true;
+    try {
+      const id = post ? post.id : crypto.randomUUID();
+      const removed = new Set($$("[data-remove]:checked").map((c) => Number(c.dataset.remove)));
+      const kept = (post ? (post.media || []).filter((m) => m && safeUrl(m.url)) : []).filter((_, i) => !removed.has(i));
+      const gone = (post ? (post.media || []).filter((m) => m && safeUrl(m.url)) : []).filter((_, i) => removed.has(i)).map((m) => m.path).filter((p) => SAFE_PATH.test(p || ""));
+      status.textContent = "Saving…"; status.dataset.state = "info";
+      const added = await uploadFiles(files, `posts/${id}`, (n, t) => { status.textContent = `Uploading file ${n} of ${t}…`; });
+      const title = $("#e-title").value.trim(), st = $("#e-status").value;
+      const row = { title, category: $("#e-cat").value, theme: $("#e-theme").value.trim() || null, author: $("#e-author").value.trim(),
+        summary: $("#e-summary").value.trim(), body: $("#e-body").value.trim(), status: st, media: [...kept, ...added] };
+      if (st === "published" && !(post && post.published_at)) row.published_at = new Date().toISOString();
+      const { error } = post
+        ? await backend.sb.from("posts").update(row).eq("id", id)
+        : await backend.sb.from("posts").insert({ ...row, id, slug: `${slugify(title)}-${id.slice(0, 6)}`, source: "admin" });
+      if (error) throw error;
+      if (gone.length) await backend.sb.storage.from("media").remove(gone);
+      admin.editing = undefined; admin.tab = st;
+      await Promise.all([loadAdminPosts(), loadRemote()]); rebuildStories(); renderAdmin(); flash("Saved.");
+    } catch (e) {
+      status.textContent = e.message; status.dataset.state = "error"; btn.disabled = false;
+    }
+  }
+
+  async function adminAct(act, id, note) {
+    const p = admin.posts.find((x) => x.id === id);
+    if (!p) return;
+    try {
+      if (act === "delete") {
+        if (!confirm(`Delete “${p.title}” permanently? Its uploaded files will be removed too.`)) return;
+        const paths = (p.media || []).map((m) => m && m.path).filter((x) => SAFE_PATH.test(x || ""));
+        if (paths.length) await backend.sb.storage.from("media").remove(paths);
+        const { error } = await backend.sb.from("posts").delete().eq("id", id);
+        if (error) throw error;
+      } else {
+        const patch = act === "approve" ? { status: "published", published_at: new Date().toISOString() } : act === "unpublish" ? { status: "pending" } : { status: "rejected" };
+        const { error } = await backend.sb.from("posts").update(patch).eq("id", id);
+        if (error) throw error;
+        await backend.sb.from("post_private").upsert({ post_id: id, review_note: note || null }, { onConflict: "post_id" });
+      }
+      await Promise.all([loadAdminPosts(), loadRemote()]); rebuildStories(); renderAdmin();
+      flash(act === "delete" ? "Post deleted." : act === "approve" ? "Post published." : act === "reject" ? "Post rejected." : "Post unpublished.");
+    } catch (e) { flash(e.message, true); }
+  }
+
+  adminBox.addEventListener("click", async (event) => {
+    const tab = event.target.closest("[data-tab]");
+    if (tab) { admin.tab = tab.dataset.tab; renderAdmin(); return; }
+    const btn = event.target.closest("[data-act]");
+    if (!btn) return;
+    const act = btn.dataset.act;
+    if (act === "signout") { await backend.sb.auth.signOut(); admin.loaded = false; renderAdmin(); return; }
+    if (act === "new") { admin.editing = null; renderAdmin(); return; }
+    if (act === "cancel") { admin.editing = undefined; renderAdmin(); return; }
+    const item = btn.closest(".adm-item");
+    if (!item) return;
+    const id = item.dataset.id;
+    if (act === "edit") { admin.editing = admin.posts.find((p) => p.id === id); renderAdmin(); return; }
+    const noteField = $("[data-note]", item);
+    adminAct(act, id, noteField ? noteField.value.trim() : "");
+  });
+
+  adminBox.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    if (event.target.id === "editor-form") return saveEditor();
+    if (event.target.id === "login-form") {
+      const status = $("#login-status");
+      status.textContent = "Signing in…";
+      const { error } = await backend.sb.auth.signInWithPassword({ email: $("#a-email").value.trim(), password: $("#a-pass").value });
+      if (error) { status.textContent = error.message; status.dataset.state = "error"; }
+    }
+  });
+
+  /* ---------- Story submission (public) ---------- */
+  const storyForm = $("#story-form");
+  const storyStatus = $("#form-status");
+  const setStatus = (el, message, kind = "info") => { el.textContent = message; el.dataset.state = kind; };
+
+  function refreshSubmitUI() {
+    const online = backend.on && backend.sb;
+    $("#f-files-field").hidden = !online;
+    $("#submit-btn").textContent = online ? "Send for review" : "Open email draft";
+    setStatus(storyStatus, online
+      ? "An editor reviews every story before it is published. Your email is never shown publicly."
+      : "This opens a draft in your email app. Nothing is stored on a server.");
+    $("#f-hint").textContent = `Optional. Up to ${MAX_FILES} files, ${MAX_MB} MB each: photos, video, audio, PDF or Word documents.`;
+  }
+
+  storyForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    if (!storyForm.checkValidity()) {
+      storyForm.reportValidity();
+      return setStatus(storyStatus, "Please complete every required field.", "error");
+    }
+    const d = new FormData(storyForm);
+    if (d.get("website")) return;
+    const name = String(d.get("name")).trim(), email = String(d.get("email")).trim(), title = String(d.get("title")).trim(), story = String(d.get("story")).trim();
+    const category = String(d.get("category"));
+
+    if (!(backend.on && backend.sb)) {
+      if (!CONFIG.contactEmail || CONFIG.contactEmail.includes("example.com")) return setStatus(storyStatus, "Submissions are not set up yet.", "error");
+      const body = `Name: ${name}\nEmail: ${email}\nTheme: ${category}\n\n${story}`;
+      location.href = `mailto:${CONFIG.contactEmail}?subject=${encodeURIComponent("Story submission: " + title)}&body=${encodeURIComponent(body)}`;
+      return setStatus(storyStatus, "Your email app should open with the draft. Send it to complete your submission.");
+    }
+
+    const files = [...$("#f-files").files];
+    const problem = checkFiles(files);
+    if (problem) return setStatus(storyStatus, problem, "error");
+    const btn = $("#submit-btn"); btn.disabled = true;
+    try {
+      setStatus(storyStatus, "Sending…");
+      const media = await uploadFiles(files, `pending/${crypto.randomUUID()}`, (n, t) => setStatus(storyStatus, `Uploading file ${n} of ${t}…`));
+      const summary = story.length > 220 ? `${story.slice(0, 217).replace(/\s+\S*$/, "")}…` : story;
+      const { error } = await backend.sb.rpc("submit_post", { p_title: title, p_category: category, p_summary: summary, p_body: story, p_author: name, p_email: email, p_media: media });
+      if (error) throw error;
+      storyForm.reset();
+      setStatus(storyStatus, "Thank you. Your story has been sent for review. An editor may contact you before it is published.");
+    } catch (e) {
+      setStatus(storyStatus, `Could not send your story: ${e.message}`, "error");
+    } finally { btn.disabled = false; }
+  });
+
+  /* ---------- Newsletter ---------- */
+  const newsForm = $("#news-form");
+  const newsStatus = $("#news-status");
+  if (CONFIG.newsletterEndpoint) {
+    $("#newsletter").hidden = false;
+    newsForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      setStatus(newsStatus, "Subscribing…");
+      try {
+        const res = await fetch(CONFIG.newsletterEndpoint, { method: "POST", body: new FormData(newsForm), headers: { Accept: "application/json" } });
+        if (!res.ok) throw new Error(res.statusText);
+        newsForm.reset(); setStatus(newsStatus, "Thank you. You are subscribed.");
+      } catch { setStatus(newsStatus, "Subscription failed. Please try again later.", "error"); }
+    });
+  }
+
+  /* ---------- Router ---------- */
+  let firstRoute = true;
+
+  function route(opts = {}) {
+    const hash = decodeURIComponent(location.hash.slice(1));
+    const initial = firstRoute; firstRoute = false;
+    if (drawer.open) drawer.close();
+
+    const story = hash.startsWith("/story/") && STORIES.find((s) => s.id === hash.slice(7));
+    const page = hash.startsWith("/page/") && PAGES[hash.slice(6)] && hash.slice(6);
+    const isAdmin = hash === "/admin";
+    const waiting = hash.startsWith("/story/") && !story && backend.loading;
+    viewStory.hidden = !(story || waiting); viewPage.hidden = !page; viewAdmin.hidden = !isAdmin;
+    viewHome.hidden = Boolean(story || page || isAdmin || waiting);
+
+    if (waiting) { $("#story-content").innerHTML = `<p class="empty">Loading story…</p>`; return; }
+    if (story || page || isAdmin) {
+      if (story) { renderStory(story); renderNav(story.category); }
+      else if (page) { renderPage(page); renderNav(pageHref(page)); }
+      else { renderAdmin(); renderNav(null); setMeta(`Admin | ${SITE}`, defaultMeta.description); }
+      if (!opts.quiet) {
+        window.scrollTo(0, 0);
+        const title = isAdmin ? $("h1", adminBox) : $("#view-title", story ? $("#story-content") : $("#page-content"));
+        if (title) { title.setAttribute("tabindex", "-1"); title.focus({ preventScroll: true }); }
+      }
+      return;
+    }
+    let anchor = null;
+    if (hash.startsWith("/category/")) state.category = categories().includes(hash.slice(10)) ? hash.slice(10) : "All";
+    else if (hash === "" || hash.startsWith("/")) state.category = "All";
+    else { anchor = hash; state.category = "All"; }
+
+    setMeta(defaultMeta.title, defaultMeta.description);
+    renderNav(anchor ? null : state.category); renderHome();
+    const target = anchor && document.getElementById(anchor);
+    if (opts.quiet) return;
+    if (target) target.scrollIntoView(); else if (!initial || hash) window.scrollTo(0, 0);
+  }
+
+  /* ---------- Init ---------- */
+  $("#year").textContent = new Date().getFullYear();
+  $("#today").textContent = new Date().toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+  applyPrefs();
+  rebuildStories();
+  renderFooter();
+  renderContent();
+  initAsk();
+  refreshSubmitUI();
+  window.addEventListener("hashchange", () => { route(); onScroll(); });
+  route();
+  onScroll();
+  initBackend();
+})();
+  </script>
+</body>
+</html>
